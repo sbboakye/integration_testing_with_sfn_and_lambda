@@ -12,6 +12,11 @@ resource "aws_lambda_function" "test_lambda_function" {
 
   filename         = data.archive_file.lambda_script_zip.output_path
   source_code_hash = data.archive_file.lambda_script_zip.output_base64sha256
+  environment {
+    variables = {
+      SFN_ROLE = aws_iam_role.iam_role_for_simple_sfn.arn
+    }
+  }
 }
 
 resource "aws_iam_role" "iam_role_for_test_lambda" {
@@ -35,7 +40,7 @@ EOF
 }
 
 resource "aws_iam_policy" "test_lambda_policy" {
-  name        = "lambda-partiql-policy"
+  name        = "dummy-lambda-policy"
   description = "A test policy"
 
   policy = <<EOF
@@ -50,6 +55,20 @@ resource "aws_iam_policy" "test_lambda_policy" {
         "logs:PutLogEvents"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iam:PassRole"
+      ],
+      "Resource": "${aws_iam_role.iam_role_for_simple_sfn.arn}"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "states:CreateStateMachine"
+      ],
+      "Resource": "arn:aws:states:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
     }
   ]
 }
