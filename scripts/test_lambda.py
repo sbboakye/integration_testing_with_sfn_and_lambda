@@ -15,11 +15,24 @@ def create_state_function():
         definition="""
             {
               "Comment": "A simple states machine",
-              "StartAt": "HelloWorld",
+              "StartAt": "Hello",
               "States": {
-                "HelloWorld": {
+                "Hello": {
                   "Type": "Pass",
-                  "End": true
+                  "Next": "Wait Sixty Seconds"
+                },
+                "Wait Sixty Seconds": {
+                  "Type": "Wait",
+                  "Seconds": 60,
+                  "Next": "Final"
+                },
+                "Final": {
+                  "Type": "Pass",
+                  "Result": "This totally works",
+                  "Next": "SuccessState"
+                },
+                "SuccessState": {
+                  "Type": "Succeed"
                 }
               }
             }
