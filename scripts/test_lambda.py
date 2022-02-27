@@ -30,8 +30,20 @@ def create_state_function():
     return response
 
 
+def start_state_machine(sfn_arn):
+    response = sfn.start_execution(
+        stateMachineArn=sfn_arn,
+        input="{\"first_name\" : \"test\"}"
+    )
+    return response
+
+
 def handler(event, context):
     logger.info(f"Received event")
     sfn_creation_response = create_state_function()
 
-    return sfn_creation_response
+    if 'stateMachineArn' in sfn_creation_response:
+        sfn_execution_response = start_state_machine(sfn_arn=sfn_creation_response['stateMachineArn'])
+        logger.info(sfn_execution_response)
+
+    return None
