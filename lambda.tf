@@ -67,7 +67,8 @@ resource "aws_iam_policy" "test_lambda_policy" {
       "Effect": "Allow",
       "Action": [
         "states:CreateStateMachine",
-        "states:StartExecution"
+        "states:StartExecution",
+        "states:DescribeExecution"
       ],
       "Resource": "arn:aws:states:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
     }

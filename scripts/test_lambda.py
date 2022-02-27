@@ -51,12 +51,24 @@ def start_state_machine(sfn_arn):
     return response
 
 
+def describe_sfn_execution(execution_arn):
+    response = sfn.describe_execution(
+        executionArn=execution_arn
+    )
+    return response
+
+
 def handler(event, context):
     logger.info(f"Received event")
     sfn_creation_response = create_state_function()
 
     if 'stateMachineArn' in sfn_creation_response:
         sfn_execution_response = start_state_machine(sfn_arn=sfn_creation_response['stateMachineArn'])
-        logger.info(sfn_execution_response)
+
+        execution_status = 'RUNNING'
+
+        sfn_execution_info = describe_sfn_execution(execution_arn=sfn_execution_response['executionArn'])
+
+        logger.info(sfn_execution_info)
 
     return None
