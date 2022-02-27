@@ -56,7 +56,7 @@ resource "aws_iam_policy" "test_lambda_policy" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "dummy_lambda_policy_attachment" {
+resource "aws_iam_role_policy_attachment" "simple_sfn_policy_attachment" {
   role       = aws_iam_role.iam_role_for_test_lambda.name
   policy_arn = aws_iam_policy.test_lambda_policy.arn
 }
