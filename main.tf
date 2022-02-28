@@ -6,14 +6,15 @@ terraform {
     }
   }
 
-  #  cloud {
-  #    organization = "sambeth"
-  #
-  #    workspaces {
-  #      name = "github-actions"
-  #    }
-  #  }
+    cloud {
+      organization = "sambeth"
+
+      workspaces {
+        name = "github-actions"
+      }
+    }
 }
+
 provider "aws" {
   region = "us-east-2"
 }
