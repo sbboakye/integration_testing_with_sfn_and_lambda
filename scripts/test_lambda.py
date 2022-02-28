@@ -60,26 +60,28 @@ def describe_sfn_execution(execution_arn):
 
 
 def handler(event, context):
-    logger.info(f"Received event")
+    logger.info(f"Received event: {event}")
 
-    # create state machine
-    sfn_creation_response = create_state_function()
+    raise ValueError("Totally failed this one")
 
-    # if creation is successful
-    if 'stateMachineArn' in sfn_creation_response:
-
-        # start state machine
-        sfn_execution_response = start_state_machine(sfn_arn=sfn_creation_response['stateMachineArn'])
-
-        # default execution status
-        execution_status = 'RUNNING'
-
-        # poll state machine execution to know the current execution status
-        while execution_status == 'RUNNING':
-            time.sleep(5)
-            sfn_execution_info = describe_sfn_execution(execution_arn=sfn_execution_response['executionArn'])
-            execution_status = sfn_execution_info['status']
-
-        logger.info(sfn_execution_info)
-
-    return None
+    # # create state machine
+    # sfn_creation_response = create_state_function()
+    #
+    # # if creation is successful
+    # if 'stateMachineArn' in sfn_creation_response:
+    #
+    #     # start state machine
+    #     sfn_execution_response = start_state_machine(sfn_arn=sfn_creation_response['stateMachineArn'])
+    #
+    #     # default execution status
+    #     execution_status = 'RUNNING'
+    #
+    #     # poll state machine execution to know the current execution status
+    #     while execution_status == 'RUNNING':
+    #         time.sleep(5)
+    #         sfn_execution_info = describe_sfn_execution(execution_arn=sfn_execution_response['executionArn'])
+    #         execution_status = sfn_execution_info['status']
+    #
+    #     logger.info(sfn_execution_info)
+    #
+    # return None

@@ -40,7 +40,7 @@ resource "aws_iam_policy" "simple_sfn_policy" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "dummy_lambda_policy_attachment" {
+resource "aws_iam_role_policy_attachment" "simple_sfn_policy_attachment" {
   role       = aws_iam_role.iam_role_for_simple_sfn.name
   policy_arn = aws_iam_policy.simple_sfn_policy.arn
 }

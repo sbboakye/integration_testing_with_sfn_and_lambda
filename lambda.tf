@@ -18,10 +18,15 @@ resource "aws_lambda_function" "test_lambda_function" {
       SFN_ROLE = aws_iam_role.iam_role_for_simple_sfn.arn
     }
   }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.test_lambda_policy_attachment,
+    aws_iam_role_policy_attachment.simple_sfn_policy_attachment
+  ]
 }
 
 resource "aws_iam_role" "iam_role_for_test_lambda" {
-  name = "iam_for_dummy_lambda"
+  name = "iam_for_test_lambda"
 
   assume_role_policy = <<EOF
 {
@@ -41,7 +46,7 @@ EOF
 }
 
 resource "aws_iam_policy" "test_lambda_policy" {
-  name        = "dummy-lambda-policy"
+  name        = "test-lambda-policy"
   description = "A test policy"
 
   policy = <<EOF
@@ -78,7 +83,15 @@ resource "aws_iam_policy" "test_lambda_policy" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "simple_sfn_policy_attachment" {
+resource "aws_iam_role_policy_attachment" "test_lambda_policy_attachment" {
   role       = aws_iam_role.iam_role_for_test_lambda.name
   policy_arn = aws_iam_policy.test_lambda_policy.arn
+}
+
+resource "aws_lambda_invocation" "invoke_test_lambda" {
+  function_name = aws_lambda_function.test_lambda_function.function_name
+  input = jsonencode({
+    key1 = "value1"
+    key2 = "value2"
+  })
 }

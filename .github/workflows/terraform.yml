@@ -23,6 +23,9 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
+      - name: Integration Test
+        id: test
+        run: terraform apply --target=aws_lambda_invocation.invoke_test_lambda
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color
