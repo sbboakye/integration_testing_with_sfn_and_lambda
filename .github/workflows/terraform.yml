@@ -23,19 +23,26 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-      - name: Integration Test (Create and Invoke)
-        id: test
-        run: terraform apply --target=aws_lambda_invocation.invoke_test_lambda -auto-approve
-#      - name: Destroy Integration Test Resources
-#        id: test-destroy
-#        run: terraform destroy -auto-approve
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -no-color
+      - name: Integration Test Plan
+        id: integration-test-plan
+        run: terraform plan --target=aws_lambda_invocation.invoke_test_lambda -no-color
         continue-on-error: true
-      - name: Terraform Plan Status
-        if: steps.plan.outcome == 'failure'
+      - name: Integration Test Terraform Plan Status
+        if: steps.integration-test-plan.outcome == 'failure'
         run: exit 1
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve
+      - name: Integration Test Apply
+        id: integration-test-apply
+        run: terraform apply --target=aws_lambda_invocation.invoke_test_lambda -auto-approve
+      - name: Integration Test Destroy
+        id: test-destroy
+        run: terraform destroy -auto-approve
+#      - name: Terraform Plan
+#        id: plan
+#        run: terraform plan -no-color
+#        continue-on-error: true
+#      - name: Terraform Plan Status
+#        if: steps.plan.outcome == 'failure'
+#        run: exit 1
+#      - name: Terraform Apply
+#        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+#        run: terraform apply -auto-approve
