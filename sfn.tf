@@ -45,20 +45,12 @@ resource "aws_iam_role_policy_attachment" "simple_sfn_policy_attachment" {
   policy_arn = aws_iam_policy.simple_sfn_policy.arn
 }
 
-#resource "aws_sfn_state_machine" "simple_sfn_state_machine" {
-#  name       = "simple-sfn-state-machine"
-#  role_arn   = aws_iam_role.iam_role_for_simple_sfn.arn
-#  definition = <<EOF
-#{
-#  "Comment": "A simple states machine",
-#  "StartAt": "HelloWorld",
-#  "States": {
-#    "HelloWorld": {
-#      "Type": "Task",
-#      "Resource": "${aws_lambda_function.test_lambda_function.arn}",
-#      "End": true
-#    }
-#  }
-#}
-#EOF
-#}
+data "template_file" "sfn_definition" {
+  template = file("scripts/step_function.json")
+}
+
+resource "aws_sfn_state_machine" "simple_sfn_state_machine" {
+  name       = "simple-sfn-state-machine"
+  role_arn   = aws_iam_role.iam_role_for_simple_sfn.arn
+  definition = data.template_file.sfn_definition.rendered
+}

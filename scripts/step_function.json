@@ -1,0 +1,23 @@
+{
+  "Comment": "HAHAHAHA",
+  "StartAt": "Starter",
+  "States": {
+    "Starter": {
+      "Type": "Pass",
+      "Next": "Wait Sixty Seconds"
+    },
+    "Wait Sixty Seconds": {
+      "Type": "Wait",
+      "Seconds": 300,
+      "Next": "Final"
+    },
+    "Final": {
+      "Type": "Pass",
+      "Result": "This totally works",
+      "Next": "SuccessState"
+    },
+    "SuccessState": {
+      "Type": "Succeed"
+    }
+  }
+}

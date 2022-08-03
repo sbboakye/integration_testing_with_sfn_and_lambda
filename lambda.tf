@@ -15,13 +15,15 @@ resource "aws_lambda_function" "test_lambda_function" {
   source_code_hash = data.archive_file.lambda_script_zip.output_base64sha256
   environment {
     variables = {
-      SFN_ROLE = aws_iam_role.iam_role_for_simple_sfn.arn
+      SFN_ROLE = aws_iam_role.iam_role_for_simple_sfn.arn,
+      SFN_ARN = aws_sfn_state_machine.simple_sfn_state_machine.arn
     }
   }
 
   depends_on = [
     aws_iam_role_policy_attachment.test_lambda_policy_attachment,
-    aws_iam_role_policy_attachment.simple_sfn_policy_attachment
+    aws_iam_role_policy_attachment.simple_sfn_policy_attachment,
+    aws_sfn_state_machine.simple_sfn_state_machine
   ]
 }
 
@@ -73,6 +75,7 @@ resource "aws_iam_policy" "test_lambda_policy" {
       "Effect": "Allow",
       "Action": [
         "states:CreateStateMachine",
+        "states:DescribeStateMachine",
         "states:StartExecution",
         "states:DescribeExecution"
       ],
@@ -88,10 +91,10 @@ resource "aws_iam_role_policy_attachment" "test_lambda_policy_attachment" {
   policy_arn = aws_iam_policy.test_lambda_policy.arn
 }
 
-resource "aws_lambda_invocation" "invoke_test_lambda" {
-  function_name = aws_lambda_function.test_lambda_function.function_name
-  input = jsonencode({
-    key1 = "value1"
-    key2 = "value2"
-  })
-}
+#resource "aws_lambda_invocation" "invoke_test_lambda" {
+#  function_name = aws_lambda_function.test_lambda_function.function_name
+#  input = jsonencode({
+#    key1 = "value1"
+#    key2 = "value2"
+#  })
+#}
