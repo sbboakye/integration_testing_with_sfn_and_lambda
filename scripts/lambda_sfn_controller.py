@@ -8,8 +8,8 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 sfn = boto3.client("stepfunctions")
-sfn_role = os.environ['SFN_ROLE']
-sfn_arn = os.environ['SFN_ARN']
+SFN_ROLE = os.environ['SFN_ROLE']
+SFN_ARN = os.environ['SFN_ARN']
 
 
 def create_state_function(definition_str):
@@ -36,7 +36,7 @@ def create_state_function(definition_str):
     response = sfn.create_state_machine(
         name="simple-state-machine",
         definition=json.dumps(definition),
-        roleArn=sfn_role,
+        roleArn=SFN_ROLE,
         type="STANDARD"
     )
     return response
@@ -64,11 +64,8 @@ def handler(event, context):
 
     # describe state machine
     sfn_description = sfn.describe_state_machine(
-        stateMachineArn=sfn_arn
+        stateMachineArn=SFN_ARN
     )
-
-    # logger.info(type(json.loads(sfn_description['definition'])))
-    # logger.info(json.loads(json.dumps(sfn_description['definition'], default=str)))
 
     # create state machine
     sfn_creation_response = create_state_function(sfn_description['definition'])
