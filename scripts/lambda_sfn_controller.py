@@ -82,7 +82,7 @@ def handler(event, context):
 
             # poll state machine execution to know the current execution status
             while execution_status == 'RUNNING':
-                time.sleep(5)
+                time.sleep(300)
                 sfn_execution_info = describe_sfn_execution(execution_arn=sfn_execution_response['executionArn'])
                 execution_status = sfn_execution_info['status']
 

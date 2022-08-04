@@ -33,9 +33,9 @@ jobs:
       - name: Integration Test Apply
         id: integration-test-apply
         run: terraform apply --target=aws_lambda_invocation.invoke_test_lambda -auto-approve
-      - name: Integration Test Destroy
-        id: test-destroy
-        run: terraform destroy -auto-approve
+#      - name: Integration Test Destroy
+#        id: test-destroy
+#        run: terraform destroy -auto-approve
 #      - name: Terraform Plan
 #        id: plan
 #        run: terraform plan -no-color
