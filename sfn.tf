@@ -34,6 +34,13 @@ resource "aws_iam_policy" "simple_sfn_policy" {
         "logs:PutLogEvents"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "lambda:InvokeFunction"
+      ],
+      "Resource": "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
     }
   ]
 }
@@ -43,10 +50,6 @@ EOF
 resource "aws_iam_role_policy_attachment" "simple_sfn_policy_attachment" {
   role       = aws_iam_role.iam_role_for_simple_sfn.name
   policy_arn = aws_iam_policy.simple_sfn_policy.arn
-}
-
-data "template_file" "sfn_definition" {
-  template = file("scripts/step_function.json")
 }
 
 resource "aws_sfn_state_machine" "simple_sfn_state_machine" {

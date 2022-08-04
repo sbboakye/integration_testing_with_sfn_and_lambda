@@ -4,11 +4,16 @@
   "States": {
     "Starter": {
       "Type": "Pass",
-      "Next": "Wait Sixty Seconds"
+      "Next": "Wait Ten Seconds"
     },
-    "Wait Sixty Seconds": {
+    "Wait Ten Seconds": {
       "Type": "Wait",
-      "Seconds": 300,
+      "Seconds": 10,
+      "Next": "Convert To Number"
+    },
+    "Convert To Number": {
+      "Type": "Task",
+      "Resource": "${lambda_arn}",
       "Next": "Final"
     },
     "Final": {
