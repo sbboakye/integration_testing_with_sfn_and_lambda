@@ -80,19 +80,18 @@ def handler(event, context):
             # start state machine
             sfn_execution_response = start_state_machine(sfn_arn=sfn_creation_response['stateMachineArn'])
 
-            # # default execution status
-            # execution_status = 'RUNNING'
-            #
-            # # poll state machine execution to know the current execution status
-            # while execution_status == 'RUNNING':
-            #     time.sleep(5)
-            #     sfn_execution_info = describe_sfn_execution(execution_arn=sfn_execution_response['executionArn'])
-            #     execution_status = sfn_execution_info['status']
-            #
-            # if execution_status != 'SUCCEEDED':
-            #     raise Exception("Step function failed")
-            #
-            # logger.info(sfn_execution_info)
+            # default execution status
+            execution_status = 'RUNNING'
+
+            # poll state machine execution to know the current execution status
+            while execution_status == 'RUNNING':
+                time.sleep(5)
+                sfn_execution_info = describe_sfn_execution(execution_arn=sfn_execution_response['executionArn'])
+                execution_status = sfn_execution_info['status']
+
+            if execution_status != 'SUCCEEDED':
+                raise Exception("Step function failed")
+
         except Exception as e:
             logger.error(e)
 
