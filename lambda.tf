@@ -15,7 +15,7 @@ resource "aws_lambda_function" "lambda_sfn_controller_function" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.test_lambda_policy_attachment,
+    aws_iam_role_policy_attachment.lambda_sfn_controller_policy_attachment,
     aws_iam_role_policy_attachment.simple_sfn_policy_attachment,
     aws_sfn_state_machine.simple_sfn_state_machine
   ]
